@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Admin - Resume Details{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h4 class="mb-0">{{ resume.original_filename }}</h4>
+          <p class="text-muted mb-0">Uploaded {{ resume.upload_time.strftime('%Y-%m-%d %H:%M') }} by {{ resume.user.full_name }} ({{ resume.user.email }})</p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('admin.download_report', resume_id=resume.id) }}" class="btn btn-primary btn-sm">Download Report</a>
+          <a href="{{ url_for('admin.resumes') }}" class="btn btn-outline-secondary btn-sm">Back to Resumes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4">
+      <h5 class="section-title">Extracted Resume Text</h5>
+      {% if resume.extracted_text %}
+      <pre class="bg-light p-4 rounded">{{ resume.extracted_text }}</pre>
+      {% else %}
+      <div class="empty-state text-center">
+        <h4>No extracted resume text available</h4>
+        <p class="text-muted">This resume has not been processed yet.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

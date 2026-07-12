@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4 mb-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+        <div>
+          <h2 class="card-title mb-2">Welcome back, {{ user.full_name or user.username }}</h2>
+          <p class="text-muted mb-0">Manage your uploaded resumes, review insights, and continue your workflow from one place.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Upload Resume</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-6">
+    <div class="card action-card">
+      <div class="card-body">
+        <h5 class="card-title">Total Resumes</h5>
+        <p class="display-6 mb-0">{{ total_resumes }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card action-card">
+      <div class="card-body">
+        <h5 class="card-title">Latest Resume</h5>
+        <p class="mb-0">{{ latest_resume.original_filename if latest_resume else 'None yet' }}</p>
+        {% if latest_resume %}
+        <a href="{{ url_for('resume.details', resume_id=latest_resume.id) }}" class="btn btn-link btn-sm mt-3 ps-0">Open Latest Resume</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-12">
+    <div class="card action-card">
+      <div class="card-body">
+        <h5 class="card-title">Resume Hub</h5>
+        <p class="text-muted mb-3">Access your recent resume workflow without losing context.</p>
+        <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Go to Resume Upload</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4">
+      <h4 class="section-title">Recent Resume</h4>
+      {% if latest_resume %}
+      <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start">
+        <div>
+          <h5>{{ latest_resume.original_filename }}</h5>
+          <p class="text-muted mb-1">Uploaded {{ latest_resume.upload_time.strftime('%Y-%m-%d %H:%M') }}</p>
+          <p class="mb-0">Use Resume Details to continue your analysis workflow.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{{ url_for('resume.details', resume_id=latest_resume.id) }}" class="btn btn-primary btn-sm">Open Resume Details</a>
+          <a href="{{ url_for('resume.index') }}" class="btn btn-outline-secondary btn-sm">Upload New Resume</a>
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state text-center">
+        <h4>No resumes uploaded yet</h4>
+        <p class="text-muted">Upload your first resume to start ATS analysis, job matching, and interview preparation.</p>
+        <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Upload Your First Resume</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

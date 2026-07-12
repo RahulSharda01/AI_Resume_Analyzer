@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Job Description Match{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4 mb-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+        <div>
+          <h2 class="card-title mb-2">Job Description Matching</h2>
+          <p class="text-muted mb-1">Paste a job description to compare it against your resume.</p>
+        </div>
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('resume.details', resume_id=resume.id) }}">Back to Resume Details</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card action-card h-100 p-4">
+      <h5 class="mb-4">Compare Resume</h5>
+      <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="mb-4">
+          {{ form.job_description.label(class="form-label") }}
+          {{ form.job_description(class="form-control", rows=12, placeholder="Paste the job description here...") }}
+        </div>
+        {{ form.submit(class="btn btn-primary btn-lg") }}
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card action-card p-4">
+      <h5 class="mb-3">Match Summary</h5>
+      {% if match_result %}
+      <div class="mb-3">
+        <span class="h3 text-primary">{{ match_result.similarity_percent }}%</span>
+        <p class="text-muted mb-0">Job description match score</p>
+      </div>
+      <div class="mb-3">
+        <h6>Matched Skills</h6>
+        {% for skill in match_result.matched_skills %}
+        <span class="badge badge-skill">{{ skill }}</span>
+        {% endfor %}
+        {% if not match_result.matched_skills %}
+        <p class="text-muted">None</p>
+        {% endif %}
+      </div>
+      <div class="mb-3">
+        <h6>Missing Skills</h6>
+        {% for skill in match_result.missing_skills %}
+        <span class="badge badge-missing">{{ skill }}</span>
+        {% endfor %}
+        {% if not match_result.missing_skills %}
+        <p class="text-muted">None</p>
+        {% endif %}
+      </div>
+      <div>
+        <h6>Suggested Skills</h6>
+        {% for skill in match_result.suggested_skills %}
+        <span class="badge badge-suggested">{{ skill }}</span>
+        {% endfor %}
+        {% if not match_result.suggested_skills %}
+        <p class="text-muted">None</p>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="empty-state text-center">
+        <h4>No comparison yet</h4>
+        <p class="text-muted">Paste a job description to see matching insights.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="card shadow-sm border-0 p-4 mt-4">
+      <h5>History</h5>
+      {% if history %}
+      <ul class="list-group list-group-flush">
+        {% for entry in history %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ entry.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+          <span class="badge bg-primary rounded-pill">{{ entry.similarity_score }}%</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-muted mb-0">No history yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

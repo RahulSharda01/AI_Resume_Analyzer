@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Resume Details{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+        <div>
+          <h2 class="card-title mb-2">Resume Details</h2>
+          <p class="text-muted mb-1">{{ resume.original_filename }}</p>
+          <p class="mb-0">Uploaded {{ resume.upload_time.strftime('%Y-%m-%d %H:%M') }} • {{ resume.file_size }} bytes</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('resume.index') }}">Back to Uploads</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-6 col-xl-3">
+    <div class="card action-card h-100">
+      <div class="card-body">
+        <div class="icon-box">
+          <span class="bi bi-speedometer2"></span>
+        </div>
+        <h5 class="action-card-title">ATS Analysis</h5>
+        <p class="text-muted">Review your resume's ATS score, category details, and improvement suggestions.</p>
+        <a href="{{ url_for('resume.ats_result', resume_id=resume.id) }}" class="btn btn-primary btn-sm mt-3">Open ATS</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card action-card h-100">
+      <div class="card-body">
+        <div class="icon-box icon-box-secondary">
+          <span class="bi bi-briefcase"></span>
+        </div>
+        <h5 class="action-card-title">Job Description Matching</h5>
+        <p class="text-muted">Compare your resume with a job description and identify matching and missing skills.</p>
+        <a href="{{ url_for('resume.job_description', resume_id=resume.id) }}" class="btn btn-primary btn-sm mt-3">Match JD</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card action-card h-100">
+      <div class="card-body">
+        <div class="icon-box">
+          <span class="bi bi-chat-left-text"></span>
+        </div>
+        <h5 class="action-card-title">Interview Questions</h5>
+        <p class="text-muted">Generate curated interview questions for technical, project, and HR rounds.</p>
+        <a href="{{ url_for('resume.interview_questions', resume_id=resume.id) }}" class="btn btn-primary btn-sm mt-3">Generate</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card action-card h-100">
+      <div class="card-body">
+        <div class="icon-box icon-box-secondary">
+          <span class="bi bi-file-earmark-pdf"></span>
+        </div>
+        <h5 class="action-card-title">Download PDF Report</h5>
+        <p class="text-muted">Create a polished summary report with ATS, matching, and interview insights.</p>
+        <a href="{{ url_for('resume.download_report', resume_id=resume.id) }}" class="btn btn-primary btn-sm mt-3">Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4">
+      <h5 class="section-title">Extracted Resume Text</h5>
+      {% if resume.extracted_text %}
+      <pre class="bg-light p-4 rounded">{{ resume.extracted_text }}</pre>
+      {% else %}
+      <div class="empty-state text-center">
+        <h4>No extracted resume text available</h4>
+        <p class="text-muted">This resume has not been processed yet.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

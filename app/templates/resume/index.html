@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Resume Upload{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card shadow-sm border-0 p-4">
+      <div class="d-flex align-items-start gap-3 mb-4">
+        <div class="icon-box">
+          <span class="bi bi-cloud-arrow-up"></span>
+        </div>
+        <div>
+          <h2 class="card-title mb-1">Upload Resume</h2>
+          <p class="text-muted mb-0">Upload a PDF or DOCX resume. Files larger than 10 MB are not accepted.</p>
+        </div>
+      </div>
+      <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="upload-dropzone mb-4">
+          <p class="mb-2"><strong>Drag and drop</strong> your resume here</p>
+          <p class="text-muted">or click below to choose a file</p>
+          <div class="d-grid">
+            <label class="btn btn-outline-primary btn-sm mx-auto mt-3" style="max-width: 220px; cursor: pointer;">
+              Choose File
+              {{ form.resume_file(class="d-none", accept=".pdf,.docx") }}
+            </label>
+          </div>
+        </div>
+        <div class="d-grid">
+          {{ form.submit(class="btn btn-primary btn-lg") }}
+        </div>
+      </form>
+      {% if total_resumes %}
+      <div class="mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0">Recently Uploaded</h5>
+          <a href="{{ url_for('resume.index') }}" class="btn btn-outline-secondary btn-sm">Upload New Resume</a>
+        </div>
+        <div class="list-group">
+          {% for item in user_resumes[:5] %}
+          <div class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+            <div>
+              <strong>{{ item.original_filename }}</strong><br>
+              <small class="text-muted">Uploaded {{ item.upload_time.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+            <a href="{{ url_for('resume.details', resume_id=item.id) }}" class="btn btn-sm btn-primary">Open Resume</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state text-center mt-5">
+        <h4>No resumes uploaded yet</h4>
+        <p class="text-muted">Upload your first resume to start ATS analysis, job matching, and interview prep.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card shadow-sm border-0 p-4 h-100">
+      <h5 class="card-title">Upload Summary</h5>
+      <div class="list-group list-group-flush">
+        <div class="list-group-item border-0 px-0 py-3">Total uploaded resumes: <strong>{{ total_resumes }}</strong></div>
+        <div class="list-group-item border-0 px-0 py-3">Latest upload: <strong>{{ latest_resume.original_filename if latest_resume else 'None yet' }}</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

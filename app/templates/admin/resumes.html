@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Admin - Resumes{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Resumes</h4>
+        <form class="d-flex" method="get">
+          <input name="q" value="{{ q }}" class="form-control form-control-sm me-2" placeholder="Search name, email or filename">
+          <button class="btn btn-sm btn-outline-secondary">Search</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 p-0">
+      <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Owner</th>
+              <th>Uploaded</th>
+              <th>ATS</th>
+              <th>JD Match</th>
+              <th>Interview</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for resume in pagination.items %}
+            <tr>
+              <td>{{ resume.original_filename }}</td>
+              <td>{{ resume.user.full_name }}<br><small class="text-muted">{{ resume.user.email }}</small></td>
+              <td>{{ resume.upload_time.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>{{ (resume.ats_score ~ '%') if resume.ats_score is not none else '—' }}</td>
+              <td>
+                {% set jm = resume.job_matches|sort(attribute='created_at')|last %}
+                {% if jm %}
+                {{ (jm.similarity_score ~ '%') }}
+                {% else %}
+                —
+                {% endif %}
+              </td>
+              <td>
+                {% set iq = resume.interview_question_sets|sort(attribute='created_at')|last %}
+                {% if iq %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+              </td>
+              <td class="text-end">
+                <a href="{{ url_for('admin.view_resume', resume_id=resume.id) }}" class="btn btn-sm btn-outline-primary me-2">View</a>
+                <a href="{{ url_for('admin.download_report', resume_id=resume.id) }}" class="btn btn-sm btn-primary me-2">Download</a>
+                <form method="post" action="{{ url_for('admin.delete_resume', resume_id=resume.id) }}" style="display:inline" onsubmit="return confirm('Delete this resume?');">
+                  {{ csrf_token() }}
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-3">
+        <nav>
+          <ul class="pagination mb-0">
+            {% if pagination.has_prev %}
+            <li class="page-item"><a class="page-link" href="?page={{ pagination.prev_num }}&q={{ q }}">Previous</a></li>
+            {% endif %}
+            {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+              {% if p %}
+                <li class="page-item {% if pagination.page == p %}active{% endif %}"><a class="page-link" href="?page={{ p }}&q={{ q }}">{{ p }}</a></li>
+              {% else %}
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+              {% endif %}
+            {% endfor %}
+            {% if pagination.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ pagination.next_num }}&q={{ q }}">Next</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
