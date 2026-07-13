@@ -3,17 +3,20 @@
 {% block content %}
 <div class="row g-4">
   <div class="col-12">
-    <div class="card shadow-sm border-0 p-4 mb-4">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Users</h4>
-        <form class="d-flex" method="get">
-          <input name="q" value="{{ q }}" class="form-control form-control-sm me-2" placeholder="Search name or email">
+    <div class="glass-card p-4 mb-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+        <div>
+          <h4 class="mb-1">Users</h4>
+          <p class="text-muted mb-0">Overview of registered accounts and account activity.</p>
+        </div>
+        <form class="d-flex flex-wrap gap-2" method="get">
+          <input name="q" value="{{ q }}" class="form-control form-control-sm" placeholder="Search name or email">
           <button class="btn btn-sm btn-outline-secondary">Search</button>
         </form>
       </div>
     </div>
 
-    <div class="card shadow-sm border-0 p-0">
+    <div class="glass-card table-card p-0">
       <div class="table-responsive">
         <table class="table mb-0">
           <thead>

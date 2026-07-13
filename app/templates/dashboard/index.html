@@ -3,72 +3,98 @@
 {% block content %}
 <div class="row g-4">
   <div class="col-12">
-    <div class="card shadow-sm border-0 p-4 mb-4">
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
-        <div>
-          <h2 class="card-title mb-2">Welcome back, {{ user.full_name or user.username }}</h2>
-          <p class="text-muted mb-0">Manage your uploaded resumes, review insights, and continue your workflow from one place.</p>
+    <section class="hero-panel glass-card">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <span class="eyebrow"><i class="bi bi-sparkles"></i> Resume intelligence suite</span>
+          <h1 class="display-6 fw-bold mt-3 mb-3">Welcome back, {{ user.full_name or user.username }}.</h1>
+          <p class="lead text-muted mb-4">Manage uploads, review ATS insights, refine job matches, and prepare for interviews from one polished workspace.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{{ url_for('resume.index') }}" class="btn btn-primary">Upload New Resume</a>
+            {% if latest_resume %}
+            <a href="{{ url_for('resume.details', resume_id=latest_resume.id) }}" class="btn btn-outline-primary">Open Latest Resume</a>
+            {% endif %}
+          </div>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
-          <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Upload Resume</a>
+        <div class="col-lg-4">
+          <div class="hero-side-card">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="icon-box"><i class="bi bi-speedometer2"></i></div>
+              <div>
+                <h5 class="mb-1">Workflow snapshot</h5>
+                <p class="text-muted mb-0">Everything in one place</p>
+              </div>
+            </div>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> ATS-ready score and suggestions</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> JD match coverage and gaps</li>
+              <li><i class="bi bi-check-circle-fill text-success me-2"></i> Interview prep in seconds</li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 
   <div class="col-lg-4 col-md-6">
-    <div class="card action-card">
-      <div class="card-body">
-        <h5 class="card-title">Total Resumes</h5>
-        <p class="display-6 mb-0">{{ total_resumes }}</p>
+    <div class="glass-card stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="stat-label">Total resumes</span>
+        <span class="badge-pill badge-skill"><i class="bi bi-file-earmark-text me-1"></i> Stored</span>
       </div>
+      <div class="stat-value">{{ total_resumes }}</div>
+      <p class="text-muted mb-0 mt-2">Your portfolio is ready for review and analysis.</p>
     </div>
   </div>
   <div class="col-lg-4 col-md-6">
-    <div class="card action-card">
-      <div class="card-body">
-        <h5 class="card-title">Latest Resume</h5>
-        <p class="mb-0">{{ latest_resume.original_filename if latest_resume else 'None yet' }}</p>
-        {% if latest_resume %}
-        <a href="{{ url_for('resume.details', resume_id=latest_resume.id) }}" class="btn btn-link btn-sm mt-3 ps-0">Open Latest Resume</a>
-        {% endif %}
+    <div class="glass-card stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="stat-label">Latest resume</span>
+        <span class="badge-pill badge-info"><i class="bi bi-clock-history me-1"></i> Recent</span>
       </div>
+      <div class="stat-value text-truncate">{{ latest_resume.original_filename if latest_resume else 'None yet' }}</div>
+      {% if latest_resume %}
+      <a href="{{ url_for('resume.details', resume_id=latest_resume.id) }}" class="btn btn-link btn-sm mt-3 ps-0">Open Latest Resume</a>
+      {% endif %}
     </div>
   </div>
   <div class="col-lg-4 col-md-12">
-    <div class="card action-card">
-      <div class="card-body">
-        <h5 class="card-title">Resume Hub</h5>
-        <p class="text-muted mb-3">Access your recent resume workflow without losing context.</p>
-        <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Go to Resume Upload</a>
+    <div class="glass-card stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="stat-label">Resume hub</span>
+        <span class="badge-pill badge-suggested"><i class="bi bi-lightning-charge me-1"></i> Fast</span>
       </div>
+      <p class="text-muted mb-3">Jump back into your recent workflow without losing context.</p>
+      <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Go to Resume Upload</a>
     </div>
   </div>
 </div>
 
-<div class="row g-4">
+<div class="row g-4 mt-1">
   <div class="col-12">
-    <div class="card shadow-sm border-0 p-4">
-      <h4 class="section-title">Recent Resume</h4>
-      {% if latest_resume %}
+    <div class="glass-card p-4">
       <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start">
         <div>
-          <h5>{{ latest_resume.original_filename }}</h5>
+          <h4 class="section-title mb-3">Recent resume</h4>
+          {% if latest_resume %}
+          <h5 class="mb-2">{{ latest_resume.original_filename }}</h5>
           <p class="text-muted mb-1">Uploaded {{ latest_resume.upload_time.strftime('%Y-%m-%d %H:%M') }}</p>
           <p class="mb-0">Use Resume Details to continue your analysis workflow.</p>
+          {% else %}
+          <div class="empty-state text-center">
+            <h4>No resumes uploaded yet</h4>
+            <p class="text-muted">Upload your first resume to start ATS analysis, job matching, and interview preparation.</p>
+            <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Upload Your First Resume</a>
+          </div>
+          {% endif %}
         </div>
+        {% if latest_resume %}
         <div class="d-flex gap-2 flex-wrap">
           <a href="{{ url_for('resume.details', resume_id=latest_resume.id) }}" class="btn btn-primary btn-sm">Open Resume Details</a>
           <a href="{{ url_for('resume.index') }}" class="btn btn-outline-secondary btn-sm">Upload New Resume</a>
         </div>
+        {% endif %}
       </div>
-      {% else %}
-      <div class="empty-state text-center">
-        <h4>No resumes uploaded yet</h4>
-        <p class="text-muted">Upload your first resume to start ATS analysis, job matching, and interview preparation.</p>
-        <a href="{{ url_for('resume.index') }}" class="btn btn-primary btn-sm">Upload Your First Resume</a>
-      </div>
-      {% endif %}
     </div>
   </div>
 </div>

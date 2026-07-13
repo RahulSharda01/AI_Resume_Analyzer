@@ -3,13 +3,13 @@
 {% block content %}
 <div class="row g-4">
   <div class="col-lg-7">
-    <div class="card shadow-sm border-0 p-4">
+    <div class="glass-card p-4 p-lg-5">
       <div class="d-flex align-items-start gap-3 mb-4">
         <div class="icon-box">
           <span class="bi bi-cloud-arrow-up"></span>
         </div>
         <div>
-          <h2 class="card-title mb-1">Upload Resume</h2>
+          <h2 class="mb-1">Upload Resume</h2>
           <p class="text-muted mb-0">Upload a PDF or DOCX resume. Files larger than 10 MB are not accepted.</p>
         </div>
       </div>
@@ -32,7 +32,7 @@
       {% if total_resumes %}
       <div class="mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="mb-0">Recently Uploaded</h5>
+          <h5 class="mb-0">Recently uploaded</h5>
           <a href="{{ url_for('resume.index') }}" class="btn btn-outline-secondary btn-sm">Upload New Resume</a>
         </div>
         <div class="list-group">
@@ -56,8 +56,8 @@
     </div>
   </div>
   <div class="col-lg-5">
-    <div class="card shadow-sm border-0 p-4 h-100">
-      <h5 class="card-title">Upload Summary</h5>
+    <div class="glass-card p-4 h-100">
+      <h5 class="mb-3">Upload summary</h5>
       <div class="list-group list-group-flush">
         <div class="list-group-item border-0 px-0 py-3">Total uploaded resumes: <strong>{{ total_resumes }}</strong></div>
         <div class="list-group-item border-0 px-0 py-3">Latest upload: <strong>{{ latest_resume.original_filename if latest_resume else 'None yet' }}</strong></div>

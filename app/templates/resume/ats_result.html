@@ -3,10 +3,11 @@
 {% block content %}
 <div class="row g-4">
   <div class="col-12">
-    <div class="card shadow-sm border-0 p-4 mb-4">
+    <div class="hero-panel glass-card mb-4">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
         <div>
-          <h2 class="card-title mb-2">ATS Analysis</h2>
+          <span class="eyebrow"><i class="bi bi-activity"></i> ATS insights</span>
+          <h2 class="mt-3 mb-2">ATS Analysis</h2>
           <p class="text-muted mb-1">Insights generated from your uploaded resume.</p>
           <p class="mb-0"><strong>Resume:</strong> {{ resume.original_filename }}</p>
         </div>
@@ -16,12 +17,12 @@
   </div>
 
   <div class="col-lg-5">
-    <div class="card action-card h-100">
+    <div class="glass-card action-card h-100">
       <div class="card-body">
         <h3 class="display-4 mb-3">{{ analysis.overall_score }}%</h3>
         <p class="text-muted mb-3">Overall ATS score based on resume structure, skills, and keywords.</p>
         <div class="progress mb-3">
-          <div class="progress-bar bg-primary" role="progressbar" style="width: {{ analysis.overall_score }}%" aria-valuenow="{{ analysis.overall_score }}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar" role="progressbar" style="width: {{ analysis.overall_score }}%" aria-valuenow="{{ analysis.overall_score }}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <p class="mb-0">Strong resume performance is above 75%.</p>
       </div>
@@ -32,15 +33,15 @@
     <div class="row g-4">
       {% for key, value in analysis.scores.items() %}
       <div class="col-md-6">
-        <div class="card action-card h-100">
+        <div class="glass-card action-card h-100">
           <div class="card-body">
             <h6 class="mb-3">{{ key.replace('_', ' ')|title }}</h6>
             <div class="d-flex justify-content-between align-items-center">
               <span class="text-muted">Score</span>
-              <span class="badge bg-primary rounded-pill">{{ (value * 100) | round(1) }}%</span>
+              <span class="badge-pill badge-skill">{{ (value * 100) | round(1) }}%</span>
             </div>
             <div class="progress mt-3">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: {{ value * 100 }}%" aria-valuenow="{{ value * 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar" role="progressbar" style="width: {{ value * 100 }}%" aria-valuenow="{{ value * 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
         </div>
@@ -50,14 +51,14 @@
   </div>
 
   <div class="col-12">
-    <div class="card shadow-sm border-0 p-4">
+    <div class="glass-card p-4">
       <div class="row g-4">
         <div class="col-md-6">
           <h5 class="section-title">Missing Skills</h5>
           {% if analysis.missing_skills %}
           <div class="d-flex flex-wrap gap-2">
             {% for skill in analysis.missing_skills %}
-            <span class="badge badge-missing">{{ skill }}</span>
+            <span class="badge-pill badge-missing">{{ skill }}</span>
             {% endfor %}
           </div>
           {% else %}
